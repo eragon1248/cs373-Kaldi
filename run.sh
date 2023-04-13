@@ -1,4 +1,4 @@
-\#!/usr/bin/env bash
+#!/usr/bin/env bash
 
 data=/lusr/opt/kaldi/kaldi-master/egs/mini_librispeech/s5/corpus/
 data_url=www.openslr.org/resources/31
@@ -7,7 +7,7 @@ lm_url=www.openslr.org/resources/11
 . ./cmd.sh
 . ./path.sh
 
-stage=0
+stage=1
 . utils/parse_options.sh
 
 set -euo pipefail
@@ -35,6 +35,11 @@ fi
 if [ $stage -le 2 ]; then
   mfccdir=mfcc
   # TODO: extract MFCCs for train and test data
+  steps/make_mfcc.sh data/train_clean_5 exp/make_mfcc $mfccdir 
+  steps/compute_cmvn_stats data/train_clean_5 exp/make_mfcc $mfccdir 
+
+  steps/make_mfcc.sh data/dev_clean_2 exp/make_mfcc $mfccdir 
+  steps/compute_cmvn_stats data/dev_clean_2 exp/make_mfcc $mfccdir 
 fi
 
 # train a monophone system

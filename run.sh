@@ -7,7 +7,7 @@ lm_url=www.openslr.org/resources/11
 . ./cmd.sh
 . ./path.sh
 
-stage=2
+stage=3
 . utils/parse_options.sh
 
 set -euo pipefail
@@ -46,6 +46,7 @@ fi
 if [ $stage -le 3 ]; then
   utils/subset_data_dir.sh --shortest data/train_clean_5 500 data/train_500short
   # TODO: train a monophone acoustic model
+  steps/train_mono.sh --boost-silence 1.25 data/train_500short data/lang_nosp exp/mono
 fi
 
 # train a delta + delta-delta triphone system on all utterances

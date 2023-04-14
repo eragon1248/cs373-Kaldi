@@ -7,7 +7,7 @@ lm_url=www.openslr.org/resources/11
 . ./cmd.sh
 . ./path.sh
 
-stage=3
+stage=4
 . utils/parse_options.sh
 
 set -euo pipefail
@@ -52,7 +52,9 @@ fi
 # train a delta + delta-delta triphone system on all utterances
 if [ $stage -le 4 ]; then
     # TODO: 1) force-align the entire training set with the monophone model
+    steps/align_si.sh --boost-silence 1.25 data/train_clean_5 data/lang_nosp exp/mono exp/mono_ali_train_clean_5
     # TODO: 2) train the triphone model on the entire training set
+    steps/train_deltas.sh 2000 10000 data/train_clean_5 data/lang_nosp exp/mono exp/mono_ali_train_clean_5 exp/tri1
 fi
 
 if [ $stage -le 5 ]; then
